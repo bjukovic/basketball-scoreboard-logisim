@@ -1,10 +1,10 @@
 # Basketball Scoreboard Simulation
 
-A digital basketball scoreboard simulation developed in **Logisim** as a practical implementation of digital logic design principles. The project reproduces the core functionality of a basketball scoreboard, including score tracking, foul management, game timing, period management, shot clock control, buzzer alerts, and possession indication.
+A digital basketball scoreboard simulation developed individually using **Logisim Evolution** as a practical implementation of digital logic design principles. The project reproduces the core functionality of a basketball scoreboard, including score tracking, foul management, game timing, period management, shot clock control, buzzer alerts, and possession indication.
 
 ## Overview
 
-The objective of this project is to design and simulate a functional basketball scoreboard using digital logic circuits.
+The objective of this project was to design and simulate a functional basketball scoreboard using digital logic circuits.
 
 The system combines multiple digital logic components into an integrated scoreboard capable of responding to user input and displaying game information in real time. The implementation demonstrates the practical application of **combinational and sequential logic**, counters, multiplexers, adders, comparators, flip-flops, and seven-segment displays.
 
@@ -61,8 +61,6 @@ The system includes a **24-second shot clock**.
 
 ## System Architecture
 
-The scoreboard is composed of four primary subsystems:
-
 ```text
                        BASKETBALL SCOREBOARD
                                 │
@@ -82,7 +80,7 @@ The scoreboard is composed of four primary subsystems:
                                            └──────────────┘
 ```
 
-Each subsystem is implemented independently and integrated into the final scoreboard circuit.
+Each subsystem was designed independently and then integrated into the final scoreboard circuit.
 
 ## Digital Logic Implementation
 
@@ -145,7 +143,7 @@ The main scoreboard display is positioned at the center of the design, while the
 
 The control layout is divided into:
 
-**Home Team Controls**
+### Home Team Controls
 
 * Add 1 point
 * Add 2 points
@@ -154,7 +152,7 @@ The control layout is divided into:
 * Add foul
 * Reset score
 
-**Guest Team Controls**
+### Guest Team Controls
 
 * Add 1 point
 * Add 2 points
@@ -163,7 +161,7 @@ The control layout is divided into:
 * Add foul
 * Reset score
 
-**Game Controls**
+### Game Controls
 
 * Start/stop game timer
 * Reset game timer
@@ -198,7 +196,7 @@ The following screenshots showcase the main components and the final implementat
 
 ### Complete Scoreboard
 
-The complete Logisim circuit, including the scoreboard display, team controls, game timer controls, and shot clock controls.
+The complete Logisim Evolution circuit, including the scoreboard display, team controls, game timer controls, and shot clock controls.
 
 ![Complete Scoreboard](screenshots/FullView.png)
 
@@ -257,7 +255,7 @@ The integrated system provides an interactive representation of the primary func
 
 ### Software
 
-* **Logisim**
+* **Logisim Evolution**
 
 ### Digital Logic Concepts
 
@@ -291,7 +289,7 @@ basketball-scoreboard-logisim/
 ### Files
 
 **`BasketballScoreboard.circ`**
-The complete Logisim circuit containing the basketball scoreboard implementation and all of its subsystems.
+The complete Logisim Evolution circuit containing the basketball scoreboard implementation and all of its subsystems.
 
 **`screenshots/`**
 Contains screenshots of the completed circuit and its individual components.
@@ -303,7 +301,7 @@ Project documentation, implementation overview, and visual documentation.
 
 ### Prerequisites
 
-* [Logisim](https://sourceforge.net/projects/circuit/) or a compatible Logisim-based digital circuit simulator
+* **Logisim Evolution**
 
 ### Running the Simulation
 
@@ -319,7 +317,7 @@ git clone https://github.com/bjukovic/basketball-scoreboard-logisim.git
 cd basketball-scoreboard-logisim
 ```
 
-3. Open `BasketballScoreboard.circ` in Logisim.
+3. Open `BasketballScoreboard.circ` in Logisim Evolution.
 4. Start the circuit simulation.
 5. Use the control buttons to operate the scoreboard.
 
@@ -340,7 +338,7 @@ The primary objectives of this project were to:
 
 This project demonstrates how individual digital logic components can be combined to create a complete interactive system.
 
-Through the implementation, the project provides practical experience with:
+Through the implementation, the project provided practical experience with:
 
 * Digital circuit design
 * Combinational and sequential logic
@@ -355,7 +353,14 @@ Through the implementation, the project provides practical experience with:
 
 ## Academic Context
 
-This project was developed as a practical application of **Digital Logic Design**, combining theoretical concepts with the implementation of a functional sports-management system.
+|                             |                    |
+| --------------------------- | ------------------ |
+| **Course**                  | Digital Design     |
+| **Semester**                | Fall 2024          |
+| **Project Type**            | Individual Project |
+| **Development Environment** | Logisim Evolution  |
+
+This project was developed as a practical application of **Digital Design**, combining theoretical concepts with the implementation of a functional sports-management system.
 
 The basketball scoreboard provides a concrete example of how digital logic can be applied to a real-world system requiring timing, counting, state management, user input, and visual output.
 
@@ -364,5 +369,3 @@ The basketball scoreboard provides a concrete example of how digital logic can b
 **Berina Juković**
 
 Computer Science & Engineering
-
-
