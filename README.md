@@ -1,27 +1,27 @@
 # Basketball Scoreboard Simulation
 
-A digital basketball scoreboard simulation developed in **Logisim** as a practical implementation of digital logic design principles. The system reproduces the core functionality of a basketball scoreboard, including team scoring, foul tracking, game timing, period management, shot clock control, buzzer alerts, and possession indication.
+A digital basketball scoreboard simulation developed in **Logisim** as a practical implementation of digital logic design principles. The project reproduces the core functionality of a basketball scoreboard, including score tracking, foul management, game timing, period management, shot clock control, buzzer alerts, and possession indication.
 
 ## Overview
 
-The project was developed to demonstrate how fundamental digital logic components can be integrated into a complete, interactive system.
+The objective of this project is to design and simulate a functional basketball scoreboard using digital logic circuits.
 
-The scoreboard consists of several interconnected subsystems that operate together to simulate essential game-management functions. User inputs are processed through combinational and sequential logic circuits, while counters and seven-segment displays provide real-time feedback.
+The system combines multiple digital logic components into an integrated scoreboard capable of responding to user input and displaying game information in real time. The implementation demonstrates the practical application of **combinational and sequential logic**, counters, multiplexers, adders, comparators, flip-flops, and seven-segment displays.
 
-The project was designed with an emphasis on **functional correctness, modularity, and organized circuit design**.
+The final design is organized to resemble a physical basketball scoreboard, with separate controls for the Home and Guest teams and centralized controls for game timing.
 
 ## Features
 
 ### Score Management
 
-The system provides independent score tracking for the Home and Guest teams.
+The scoreboard provides independent score tracking for the Home and Guest teams.
 
 * Add 1, 2, or 3 points
 * Subtract 1 point to correct scoring errors
-* Reset individual team scores
-* Display scores using seven-segment displays
-* Multiplexer-based selection of scoring operations
+* Reset each team's score independently
+* Real-time score display
 * Binary-to-BCD and BCD-to-seven-segment conversion
+* Multiplexer-based selection of scoring operations
 
 ### Foul Management
 
@@ -29,97 +29,151 @@ Each team has an independent foul counter.
 
 * Increment team fouls
 * Reset foul count
-* Automatically detect five fouls
-* Activate a bonus LED when the foul count reaches five
+* Automatic detection of five fouls
+* Bonus indicator LED
 * Comparator-based foul-limit detection
+
+When a team's foul count reaches five, the corresponding LED is activated to indicate the bonus state.
 
 ### Game Timer
 
-The game timer simulates a **10-minute period**.
+The game timer simulates a **10-minute basketball period**.
 
 * Minute and second countdown
 * Period counter
-* Start/stop control
-* Reset functionality
-* Automatic transition between periods
-* Buzzer activation when the period ends
-* Seven-segment display for time and period information
+* Start/stop functionality
+* Timer reset
+* Automatic period progression
+* End-of-period detection
+* Buzzer notification
+* Seven-segment displays for time and period
 
 ### Shot Clock
 
-The scoreboard includes a **24-second shot clock**.
+The system includes a **24-second shot clock**.
 
 * 24-second countdown
-* Dedicated reset control
-* Warning LED at 1 second remaining
-* Buzzer warning before expiration
+* Dedicated reset button
+* Warning LED when 1 second remains
+* Buzzer warning
 * Possession change when the timer reaches zero
-* Possession state implemented using a T Flip-Flop
+* Possession control implemented using a T Flip-Flop
 
 ## System Architecture
 
-The project is divided into four primary subsystems:
+The scoreboard is composed of four primary subsystems:
 
 ```text
-                    BASKETBALL SCOREBOARD
-                              │
-          ┌───────────────────┼───────────────────┐
-          │                   │                   │
-          ▼                   ▼                   ▼
-    Score System         Foul System         Game Timer
-   Home / Guest         Home / Guest        10 min / Period
+                       BASKETBALL SCOREBOARD
+                                │
+              ┌─────────────────┼─────────────────┐
+              │                 │                 │
+              ▼                 ▼                 ▼
+       ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+       │ Score System │  │ Foul System  │  │ Game Timer   │
+       │ Home / Guest │  │ Home / Guest │  │ 10 min /     │
+       └──────────────┘  └──────────────┘  │ Period       │
+                                           └──────┬───────┘
                                                   │
                                                   ▼
-                                            Shot Clock
-                                              24 sec
+                                           ┌──────────────┐
+                                           │ Shot Clock   │
+                                           │   24 sec     │
+                                           └──────────────┘
 ```
 
-Each subsystem is implemented using dedicated digital logic components and is integrated into the final scoreboard interface.
+Each subsystem is implemented independently and integrated into the final scoreboard circuit.
 
 ## Digital Logic Implementation
 
 ### Score Counters
 
-Each team has an independent score counter. User input buttons determine the desired scoring operation.
+Two independent counters are used to track the scores of the Home and Guest teams.
 
-A multiplexer selects between four possible values:
+The user can select between four scoring operations:
 
-| Input | Operation |
-| ----- | --------- |
-| `00`  | +1        |
-| `01`  | +2        |
-| `10`  | +3        |
-| `11`  | -1        |
+| Selection | Operation |
+| :-------: | --------- |
+|    `00`   | +1 point  |
+|    `01`   | +2 points |
+|    `10`   | +3 points |
+|    `11`   | -1 point  |
 
-The selected value is processed by an adder and combined with the team's current score.
+The selected value is passed through a multiplexer and combined with the current score using an adder.
 
-A custom `PLUS123_1` circuit generates the multiplexer selection signals and enables the corresponding scoring operation. A negator is used to generate the negative value required for score correction.
+A custom `PLUS123_1` circuit controls the multiplexer selection. It receives the scoring button signals and produces the corresponding selection signals and multiplexer enable signal.
+
+A negator is used to generate the negative value required for the `-1` score correction.
+
+The resulting binary value is converted to BCD and subsequently to the format required by the seven-segment displays.
 
 ### Foul Counters
 
-The foul subsystem uses independent counters for the Home and Guest teams.
+The foul management system consists of two independent counters, one for each team.
 
-Each foul input increments the corresponding counter by one. A comparator continuously checks the counter against the value `5`. When five fouls are reached, the corresponding bonus LED is activated.
+Each foul button increments the corresponding counter by one. An adder combines the current counter value with a constant value of one.
+
+A comparator continuously checks whether the foul count has reached five. When the value is equal to five, the corresponding bonus LED is activated.
 
 ### Game Timer
 
-The game timer uses separate counters for minutes, seconds, and periods.
+The game timer is implemented using separate counters for:
 
-The seconds counter is driven by the clock signal. When the seconds counter reaches zero, the minutes counter is updated. Once both minutes and seconds reach zero, the period counter advances.
+* Minutes
+* Seconds
+* Periods
 
-Two comparator outputs are combined using an AND gate to detect the end of the period and activate the buzzer.
+The seconds counter operates based on the clock signal. When the seconds counter reaches zero, the minutes counter is updated. When both minutes and seconds reach zero, the period counter advances.
+
+Two comparator outputs are combined using an AND gate to detect when the period has ended. This condition activates the buzzer.
+
+The timer can be started, stopped, and reset through dedicated controls on the main interface.
 
 ### Shot Clock
 
 The shot clock implements a 24-second countdown.
 
-When the counter reaches `1`, a warning LED and buzzer are activated. When the counter reaches `0`, the possession state changes.
+When the shot clock reaches one second, a warning LED and buzzer are activated. When the counter reaches zero, the possession indicator changes state.
 
-The possession mechanism is implemented using a **T Flip-Flop** combined with a NOT gate, allowing the possession indicator to alternate between the two teams.
+The possession mechanism is implemented using a **T Flip-Flop** together with a NOT gate, allowing the possession state to alternate between the two teams.
+
+## Interface Design
+
+The final circuit is arranged to resemble a physical basketball scoreboard.
+
+The main scoreboard display is positioned at the center of the design, while the control interfaces are located below it.
+
+The control layout is divided into:
+
+**Home Team Controls**
+
+* Add 1 point
+* Add 2 points
+* Add 3 points
+* Subtract 1 point
+* Add foul
+* Reset score
+
+**Guest Team Controls**
+
+* Add 1 point
+* Add 2 points
+* Add 3 points
+* Subtract 1 point
+* Add foul
+* Reset score
+
+**Game Controls**
+
+* Start/stop game timer
+* Reset game timer
+* Reset shot clock
+
+Tunnels are used throughout the circuit to organize signal connections and reduce unnecessary wiring. This improves readability and keeps the overall circuit structure clean and maintainable.
 
 ## Components Used
 
-The circuit makes use of the following digital logic components:
+The following digital logic components are used throughout the project:
 
 * Counters
 * Adders
@@ -138,49 +192,75 @@ The circuit makes use of the following digital logic components:
 * Buzzers
 * Tunnels
 
-## Interface Design
+## Screenshots
 
-The final circuit is organized to resemble a physical basketball scoreboard.
+The following screenshots showcase the main components and the final implementation of the basketball scoreboard simulation.
 
-The scoreboard display is positioned at the center of the design, while the control interfaces are arranged below it. Controls for the Home team are placed on the left and controls for the Guest team on the right.
+### Complete Scoreboard
 
-Central controls provide access to:
+The complete Logisim circuit, including the scoreboard display, team controls, game timer controls, and shot clock controls.
 
-* Game timer start/stop
-* Game timer reset
-* Shot clock reset
+![Complete Scoreboard](screenshots/FullView.png)
 
-Tunnels are used extensively to organize signal connections and reduce unnecessary wiring across the circuit, resulting in a cleaner and more maintainable design.
+### Scoreboard Display
+
+A close-up view of the scoreboard interface displaying the current game information, including scores, fouls, game time, period, shot clock, and possession.
+
+![Scoreboard Close-Up](screenshots/ScoreboardCloseUp.png)
+
+### Point Counter
+
+The point counter subsystem responsible for managing scoring operations. The circuit supports adding 1, 2, or 3 points and subtracting 1 point for score correction.
+
+![Point Counter](screenshots/PointCounter.png)
+
+### Foul Counter
+
+The foul counter subsystem used to track fouls for each team and detect when the five-foul limit is reached.
+
+![Foul Counter](screenshots/FoulsCounter.png)
+
+### Game Timer
+
+The timer subsystem implementing the ten-minute countdown, period management, and end-of-period buzzer.
+
+![Game Timer](screenshots/Timer.png)
+
+### Shot Clock
+
+The 24-second shot clock subsystem, including the warning indicator, buzzer, and possession-change mechanism.
+
+![Shot Clock](screenshots/ShotClock.png)
 
 ## Results
 
-The completed simulation successfully implements the intended scoreboard functionality.
+The completed simulation successfully implements the intended functionality of a basketball scoreboard.
 
 Testing confirmed the correct operation of:
 
 * Home and Guest score tracking
 * 1-, 2-, and 3-point scoring
 * Score correction
-* Team foul counters
+* Independent team foul counters
 * Five-foul bonus indication
-* Game countdown timer
+* Ten-minute game timer
 * Period management
-* Period-end buzzer
+* End-of-period buzzer
 * 24-second shot clock
 * Shot-clock warning
 * Possession switching
+* Individual subsystem reset controls
 
-The integrated system provides an interactive representation of the main functions required for basketball scorekeeping while demonstrating the practical application of digital logic design.
+The integrated system provides an interactive representation of the primary functions required for basketball scorekeeping while demonstrating how fundamental digital logic components can be combined into a larger practical system.
 
 ## Technologies
 
-**Software**
+### Software
 
-* Logisim
+* **Logisim**
 
-**Concepts**
+### Digital Logic Concepts
 
-* Digital Logic Design
 * Combinational Logic
 * Sequential Logic
 * Counters
@@ -188,56 +268,101 @@ The integrated system provides an interactive representation of the main functio
 * Adders
 * Comparators
 * Flip-Flops
-* Seven-Segment Displays
+* Digital Displays
 * Clock-Based Timing
 
-## Repository Structure
+## Project Structure
 
 ```text
-Basketball-Scoreboard/
+basketball-scoreboard-logisim/
 │
 ├── BasketballScoreboard.circ
-└── README.md
+├── README.md
+│
+└── screenshots/
+    ├── FoulsCounter.png
+    ├── FullView.png
+    ├── PointCounter.png
+    ├── ScoreboardCloseUp.png
+    ├── ShotClock.png
+    └── Timer.png
 ```
 
 ### Files
 
 **`BasketballScoreboard.circ`**
-Complete Logisim circuit containing the basketball scoreboard implementation.
+The complete Logisim circuit containing the basketball scoreboard implementation and all of its subsystems.
+
+**`screenshots/`**
+Contains screenshots of the completed circuit and its individual components.
 
 **`README.md`**
-Project documentation and system overview.
+Project documentation, implementation overview, and visual documentation.
 
 ## Getting Started
 
 ### Prerequisites
 
-* Logisim or a compatible Logisim-based digital circuit simulator
+* [Logisim](https://sourceforge.net/projects/circuit/) or a compatible Logisim-based digital circuit simulator
 
 ### Running the Simulation
 
-1. Clone the repository.
-2. Open `BasketballScoreboard.circ` in Logisim.
-3. Start the circuit simulation.
-4. Use the provided control buttons to operate the scoreboard.
+1. Clone the repository:
+
+```bash
+git clone https://github.com/bjukovic/basketball-scoreboard-logisim.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd basketball-scoreboard-logisim
+```
+
+3. Open `BasketballScoreboard.circ` in Logisim.
+4. Start the circuit simulation.
+5. Use the control buttons to operate the scoreboard.
 
 ## Project Objectives
 
-The primary objectives of the project were to:
+The primary objectives of this project were to:
 
-1. Design a functional digital basketball scoreboard.
-2. Apply digital logic concepts to a practical application.
+1. Design and implement a functional digital basketball scoreboard.
+2. Apply digital logic concepts to a practical real-world application.
 3. Implement independent scoring and foul-management systems.
 4. Develop clock-based countdown and period-management circuits.
 5. Implement a 24-second shot clock with possession control.
 6. Integrate multiple digital subsystems into a single functional circuit.
-7. Maintain an organized and understandable circuit architecture.
+7. Design an organized and understandable circuit architecture.
+8. Demonstrate the interaction between combinational and sequential logic.
+
+## Educational Value
+
+This project demonstrates how individual digital logic components can be combined to create a complete interactive system.
+
+Through the implementation, the project provides practical experience with:
+
+* Digital circuit design
+* Combinational and sequential logic
+* Counter design
+* Arithmetic operations
+* Multiplexer-based input selection
+* Comparator-based control
+* Flip-Flop state management
+* Clock-driven systems
+* Seven-segment display control
+* Modular circuit organization
 
 ## Academic Context
 
-This project was developed as a practical application of **Digital Logic Design**, demonstrating the integration of fundamental logic components into a larger real-world system.
+This project was developed as a practical application of **Digital Logic Design**, combining theoretical concepts with the implementation of a functional sports-management system.
+
+The basketball scoreboard provides a concrete example of how digital logic can be applied to a real-world system requiring timing, counting, state management, user input, and visual output.
 
 ## Author
 
 **Berina Juković**
+
 Computer Science & Engineering
+
+
